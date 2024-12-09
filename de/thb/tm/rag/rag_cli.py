@@ -2,7 +2,6 @@ import argparse
 import httpx
 import json
 import logging.config
-import yaml
 
 from httpx import Response
 from http.client import HTTPException
@@ -15,12 +14,12 @@ from langchain_chroma import Chroma
 from langchain.schema.document import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter as RCSpliter
 
+from de.thb.util import setup_logging
 
-LOG_CONFIG_PATH: str = '../../../../../resources/util/logging_config.yaml'
-CHROMA_PATH: str = '../../../../../data/chroma'
+CHROMA_PATH: str = 'data/chroma'
 BASE_URL: str = "http://localhost:11434/api/generate"
 ACTIVE_MODEL: str = 'llama3.2:1b'
-PDF_LIB_DIR: str = '../../../../../lib/pdf'
+PDF_LIB_DIR: str = 'data/library/pdf'
 PROMPT_TEMPLATE: str = '''
     Answer the question based on following context:
     {context}
@@ -231,12 +230,6 @@ def get_embedding_function_depr():
 
 def get_embedding_function():
     return OllamaEmbeddings(model='nomic-embed-text')
-
-
-def setup_logging() -> None:
-    with open(LOG_CONFIG_PATH, 'r') as f:
-        config = yaml.safe_load(f.read())
-    logging.config.dictConfig(config)
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
