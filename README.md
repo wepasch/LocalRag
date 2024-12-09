@@ -1,6 +1,7 @@
 # rag
 ## cli rag
 ### Prerequisites
+- add pdfs into ./data/library/pdf
 - running ollama docker container with language and embedding (e.g. llama3.2:1b, nomic embed text)<br>
   **Steps**
   - initialize container from terminal with running *docker desktop* and command:<br>
