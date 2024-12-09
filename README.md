@@ -22,4 +22,4 @@ The resulting dialog is printed to console. Example:<br>
 ## rag frontend
 ### Usage
 Run from project directory:<br>
-_streamlit run de/thb/tm/rag/rag_frontend.py --server.port 12345_
+>streamlit run de/thb/tm/rag/rag_frontend.py --server.port 12345
