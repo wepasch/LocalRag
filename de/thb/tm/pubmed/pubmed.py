@@ -5,13 +5,14 @@ import requests
 from Bio import Entrez
 from bs4 import BeautifulSoup
 
+from de.thb.util import get_root_dir
 
 PHYSIO_QUERY: str = 'physiotherapy internal diseases'
 # add if needed
 MAIL: str = ''
-RECORD_PATH: str = '../../../../../record.json'
-PDF_DIR: str = '../../../../../pdf'
-TXT_DIR: str = '../../../../../txt'
+RECORD_PATH: str = 'logs/pdf_import_record.json'
+PDF_DIR: str = 'data/library/pdf'
+TXT_DIR: str = 'data/library/txt'
 SUFFIX_PDF: str = '.pdf'
 SUFFIX_TXT: str = '.txt'
 KEY_SUCCESS: str = 'successful'
@@ -139,7 +140,8 @@ def get_record() -> dict:
     if not os.path.isfile(RECORD_PATH):
         print(f'No record file at {RECORD_PATH}.')
         return {KEY_SUCCESS: [], KEY_FAIL: []}
-    with open(RECORD_PATH, 'r') as record_file:
+    record_path = os.path.join(get_root_dir(), RECORD_PATH)
+    with open(record_path, 'r') as record_file:
         record: dict = json.load(record_file)
         if KEY_SUCCESS in record and KEY_FAIL in record:
             return record
@@ -151,7 +153,8 @@ def write_record(data: dict) -> None:
     """
     :param data: is written into record
     """
-    with open(RECORD_PATH, 'w') as record_file:
+    record_path = os.path.join(get_root_dir(), RECORD_PATH)
+    with open(record_path, 'w') as record_file:
         json.dump(data, record_file)
 
 
@@ -182,10 +185,15 @@ def main():
     # write pdfs from pymed ids
     write_pdfs_one_by_one(new_pmids, MAIL, record)
     # convert pdfs to text
-    convert_pdfs()
+    # convert_pdfs()
 
 
 
 
 if __name__ == '__main__':
+    """
+    TODO Fix this :-)
+    """
+    print('Not usable with current paths...')
+    exit(9)
     main()

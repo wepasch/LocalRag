@@ -18,7 +18,8 @@ from de.thb.util import setup_logging
 
 CHROMA_PATH: str = 'data/chroma'
 BASE_URL: str = "http://localhost:11434/api/generate"
-ACTIVE_MODEL: str = 'llama3.2:1b'
+LLM_MODEL: str = 'llama3.2:1b'
+EMBEDDING_MODEL: str = 'nomic-embed-text'
 PDF_LIB_DIR: str = 'data/library/pdf'
 PROMPT_TEMPLATE: str = '''
     Answer the question based on following context:
@@ -91,11 +92,12 @@ class QueryRecord:
         return '\n'.join([f"{f[0]} pg.{f[1]} - pt.{f[2]}" for f in sources_split])
 
 
-def process_query(query_record: QueryRecord) -> None:
+def process_query(query_record: QueryRecord, temperature: float | None = None) -> None:
     """
     Collect fitting documents, add context from documents, send prompt with question and context to llm and add answer
     to QueryRecord
     :param query_record: with question
+    :param temperature: temperature parameter for llm in [0,1]
     """
     query: str = query_record.query
     logger.info('Query: %s', query)
@@ -107,9 +109,19 @@ def process_query(query_record: QueryRecord) -> None:
                  f'{"\n\t".join([f"{c[1]} {c[0].metadata['id']}" for c in most_fitting_chunks])} ... constructing\n\t\t'
                  f'\'{query_record.get_full_prompt()}\'')
     data: dict = {
-        'model': ACTIVE_MODEL,
+        'model': LLM_MODEL,
         'prompt': query_record.get_full_prompt()
     }
+    if temperature:
+        if temperature < 0:
+            logger.warning('Negative temperature detected. Set it to 0.')
+            temperature = 0
+        elif temperature > 1:
+            logger.warning('Temperature greater 1 detected. Set it to 1.')
+            temperature = 1
+        logger.info(f'Using temperature of {temperature}')
+        data['options'] = {"temperature": temperature}
+
     full_response: str = ollama_response_to_str(
         httpx.post(BASE_URL, data=json.dumps(data), headers={'Content-Type': 'application/json'}, timeout=TIME_OUT))
     query_record.add_answer(full_response)
@@ -225,11 +237,11 @@ def get_embedding_function_depr():
     """
     TODO Replace import to not deprecated OllamaEmbeddings
     """
-    return OllamaEmbeddings(model='nomic-embed-text')
+    return OllamaEmbeddings(model=EMBEDDING_MODEL)
 
 
 def get_embedding_function():
-    return OllamaEmbeddings(model='nomic-embed-text')
+    return OllamaEmbeddings(model=EMBEDDING_MODEL)
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
