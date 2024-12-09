@@ -14,4 +14,9 @@
 that directory will be embedded by the embedding model into the chroma db. If there is no existing chroma db, it should 
 be created at CHROMA_PATH in the first run.
 - de.thb.tm.rag.rag_cli.py can be run with the *-q* option . *-q* is followed by the question for the rag system. 
-The resulting dialog is printed to console.    
+The resulting dialog is printed to console.
+
+## rag frontend
+### Usage
+Run from project directory:<br>
+_streamlit run src/de/thb/tm/rag/rag_frontend.py --server.port 12345_
