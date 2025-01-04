@@ -1,26 +1,40 @@
-# rag
-## cli rag
+# Local Rag
 ### Prerequisites
-- add pdfs into ./data/library/pdf
-- running ollama docker container with language and embedding (e.g. llama3.2:1b, nomic embed text)<br>
+- running ollama docker container with llm and embedding (e.g. llama3.2:1b, nomic embed text)<br>
   **Steps**
   - initialize container from terminal with running *docker desktop* and command:<br>
   _docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama_
   - run the following commands in *docker desktop* under the *Exec* tab of the **ollama** container :<br>
-  >ollama pull llama3.2:1b_<br>
+  >ollama pull llama3.2:1b<br>
 
   >ollama pull nomic-embed-text
 
-### Usage
-- de.thb.tm.rag.rag_cli.py can be run with the *-u* flag to update chroma db with files from PDF_LIB_DIR. Files in 
-that directory will be embedded by the embedding model into the chroma db. If there is no existing chroma db, it should 
-be created at CHROMA_PATH in the first run.
-- de.thb.tm.rag.rag_cli.py can be run with the *-q* option . *-q* is followed by the question for the rag system. 
-The resulting dialog is printed to console. Example:<br>
-> python de/thb/tm/rag/rag_cli.py -q "Can the mckenzie method reduce pain and if it does which kind of pain?"
+If other embedding or llm is used, edit entries EMBEDDING_MODEL or LLM_MODEL in util/config.py
 
+- activated environment with python interpreter (requirements.txt coming up)
+- (set CHAT_HOST in util/config.py to host ip, default is 127.0.0.1)
+- (add pdfs custom into ./data/library/pdf)
 
-## rag frontend
-### Usage
-Run from project directory:<br>
->streamlit run de/thb/tm/rag/rag_frontend.py --server.port 12345
+If executed modules can not be found, add project path to PYTHONPATH.
+___
+## Update documents
+> python rag/update.py -q &lt;query&gt;
+
+Enter search term after -q. Pubmed will be searched for free, fulltext articles. 
+The articles' data is recorded in *data/record/doc_record.json*.
+
+> python rag/update.py -q &lt;query&gt;
+
+Attempts to download recorded articles with new property status==NEW. Tries to get download url 
+from pubmed and then duckduckgo. If successfull downloads are saved into *./data/library/pdf*.
+___
+## Update chroma db
+> python rag/db.py -u
+
+Chunks and adds documents in *data/library/pdf* to chroma db. Run only with flag -v to list db size and ids. 
+___
+## Run app
+>python rag/chat.py
+
+App is running, when following line is printed *...INFO: Start with 127.0.0.1:5000...* 
+and can be accessed under the given url and port. 
