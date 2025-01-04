@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Physio Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">Chat</div>
+    <div class="user-name-container">
+        <div><span id="current-username"></span></div>
+        <input type="text" id="username-input" placeholder="new name..."/>
+        <button id="button-update-username">Set name</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+        <input type="text" id="message-input" placeholder="..."/>
+        <button id="send-chat-button">Chat</button>
+        <button id="send-ask-button">Ask</button>
+    </div>
+</div>
+<script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
