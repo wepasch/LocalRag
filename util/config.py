@@ -23,7 +23,7 @@ EMBEDDING_MODEL: str = 'nomic-embed-text'
 CHUNK_SIZE: int = 800
 CHUNK_OVERLAP: int = 80
 UPDATE_SIZE: int = 250
-# enables local deletion of chroma db
+# enables local reset of chroma db
 AUTH_CHROMA: str = '2d1a968ef85ee447222271b6b0624da8174092da3b74b21a5ede09d557cc30cb'
 
 # Pubmed
