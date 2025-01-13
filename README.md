@@ -18,12 +18,12 @@ If other embedding or llm is used, edit entries EMBEDDING_MODEL or LLM_MODEL in 
 If executed modules can not be found, add project path to PYTHONPATH.
 ___
 ## Update documents
-> python rag/update.py -q &lt;query&gt;
+> python documents/update.py -q &lt;query&gt;
 
 Enter search term after -q. Pubmed will be searched for free, fulltext articles. 
 The articles' data is recorded in *data/record/doc_record.json*.
 
-> python rag/update.py -q &lt;query&gt;
+> python documents/update.py -d
 
 Attempts to download recorded articles with new property status==NEW. Tries to get download url 
 from pubmed and then duckduckgo. If successfull downloads are saved into *./data/library/pdf*.
